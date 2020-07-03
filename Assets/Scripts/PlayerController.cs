@@ -6,8 +6,11 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class PlayerController : MonoBehaviour
 {
-    [Tooltip("In m/s")][SerializeField] float xSpeed = 50f;
-    [Tooltip("In m")] [SerializeField] float xRange = 17f;
+    [Tooltip("In m/s - x")][SerializeField] float moveSpeed = 50f;
+    [Tooltip("In m - x")][SerializeField] float xRange = 17f;
+
+    [Tooltip("In m - y")][SerializeField] float yRangeMax = 10f;
+    [Tooltip("In m - y")][SerializeField] float yRangeMin = -10f;
 
     // Start is called before the first frame update
     void Start()
@@ -18,13 +21,21 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // X
         float xThrow = CrossPlatformInputManager.GetAxis("Horizontal");
-        float xOffset = xThrow * xSpeed * Time.deltaTime;
+        float xOffset = xThrow * moveSpeed * Time.deltaTime;
 
-        float rawPos = transform.localPosition.x + xOffset;
-        float clampedXPos = Mathf.Clamp(rawPos, -xRange, xRange);
+        float rawPosX = transform.localPosition.x + xOffset;
+        float clampedXPos = Mathf.Clamp(rawPosX, -xRange, xRange);
 
+        // Y
+        float yThrow = CrossPlatformInputManager.GetAxis("Vertical");
+        float yOffset = yThrow * moveSpeed * Time.deltaTime;
 
-        transform.localPosition = new Vector3(clampedXPos, transform.localPosition.y, transform.localPosition.z);
+        float rawPosY = transform.localPosition.y + yOffset;
+        float clampedYPos = Mathf.Clamp(rawPosY, yRangeMin, yRangeMax);
+
+        // Transform
+        transform.localPosition = new Vector3(clampedXPos, clampedYPos, transform.localPosition.z);
     }
 }
