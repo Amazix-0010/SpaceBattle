@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
@@ -21,6 +22,17 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Translation();
+        Rotation();
+    }
+
+    private void Rotation()
+    {
+        transform.localRotation = Quaternion.Euler(0f, 30f, 0f);
+    }
+
+    private void Translation()
+    {
         // X
         float xThrow = CrossPlatformInputManager.GetAxis("Horizontal");
         float xOffset = xThrow * moveSpeed * Time.deltaTime;
@@ -37,5 +49,7 @@ public class PlayerController : MonoBehaviour
 
         // Transform
         transform.localPosition = new Vector3(clampedXPos, clampedYPos, transform.localPosition.z);
+
+        // localPosition = Chceme přesunovat jen raketu, to znamená dítě z Main Camera(Rodič). Nechceme hýbat s kamerou(rodičem)
     }
 }
